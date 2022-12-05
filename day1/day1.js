@@ -1,35 +1,24 @@
 const fs = require('fs');
 
 fs.readFile('input.txt', 'utf-8', (err, data) => {
-    let elfLoad = data.split('\n\n');
+  const elfLoads = data.split('\n\n');
+    
+  const elfLoadsToInts = elfLoads.map((string) => {
+      return calorieTotal(string.split('\n'));
+  });
+  
+  const sortedCaloriesPerElf = elfLoadsToInts.sort((a, b) => b - a);
 
-    let elfLoadToInts = elfLoad.map((string) => {
-        return string.split('\n').map((elfLoad) => {
-            return +elfLoad;
-        });
-    });
-
-    let caloriesPerElf = elfLoadToInts.map((arr) => {
-        return sumArray(arr);
-    });
-
-    // solution 1
-    let biggest = Math.max.apply(Math, caloriesPerElf);
-    let sortedCaloriesPerElf = caloriesPerElf.sort((a, b) => b - a);
-
-    // solution 2
-    let sumOfCalories = 0;
-    for (let i = 0; i < 3; i++) {
-        sumOfCalories += sortedCaloriesPerElf[i];
-    }
-
-    console.log(biggest);
-    console.log(sumOfCalories);
-
-    // console.log(sorted);
+  // solution 1
+  const firstElf = sortedCaloriesPerElf.slice(0,1);
+  console.log("largest:", calorieTotal(firstElf));
+  
+  // solution 2
+  const first3Elves = sortedCaloriesPerElf.slice(0,3)
+  console.log("sum of largest 3:", calorieTotal(first3Elves));
 });
 
 
-function sumArray(array) {
-    return array.reduce((a, b) => a + b, 0)
+function calorieTotal(array) {
+  return array.reduce((totalCals, cals) => totalCals + parseInt(cals), 0);
 }
